@@ -6,11 +6,14 @@ android {
     buildToolsVersion '25.0.0'
 
     defaultConfig {
+        buildConfigField "boolean", "IS_DEBUG", "true"
+        buildConfigField "String", "LOG_TAG", "\"mvpArchitecture\""
         applicationId "com.fly.mvpcleanarchitecture"
         minSdkVersion 19
         targetSdkVersion 25
         versionCode 1
         versionName "1.0"
+        multiDexEnabled true
     }
     buildTypes {
         release {
@@ -35,6 +38,8 @@ dependencies {
     compile 'com.hwangjr.rxbus:rxbus:1.0.3'
     compile 'io.reactivex:rxandroid:0.24.0'
     compile 'com.hwangjr.rxbus:rxbus:1.0.3'
+    compile 'com.orhanobut:logger:1.15'
+    compile 'com.android.support:multidex:1.0.0'
 
     // Util类
     compile 'com.blankj:utilcode:1.1.5'
