@@ -1,13 +1,14 @@
 apply plugin: 'com.android.application'
 apply plugin: 'android-apt'
 
+def keystoreProperties = new Properties()
+keystoreProperties.load(new FileInputStream(file("keystore.properties")))
+
 android {
     compileSdkVersion 25
     buildToolsVersion '25.0.0'
 
     defaultConfig {
-        buildConfigField "boolean", "IS_DEBUG", "true"
-        buildConfigField "String", "LOG_TAG", "\"mvpArchitecture\""
         applicationId "com.fly.mvpcleanarchitecture"
         minSdkVersion 19
         targetSdkVersion 25
@@ -15,9 +16,29 @@ android {
         versionName "1.0"
         multiDexEnabled true
     }
-    buildTypes {
+    signingConfigs {
+        debug {
+            storeFile file(keystoreProperties['debugKeyStoreFile'])
+        }
         release {
-            minifyEnabled false
+            storeFile file(keystoreProperties['releaseKeyStoreFile'])
+            storePassword keystoreProperties['releaseStorePassword']
+            keyAlias keystoreProperties['releaseKeyAlias']
+            keyPassword keystoreProperties['releaseKeyPassword']
+        }
+    }
+
+    buildTypes {
+        debug{
+            buildConfigField "boolean", "IS_DEBUG", "false"
+            buildConfigField "String", "LOG_TAG", "\"mvpArchitecture\""
+            signingConfig signingConfigs.debug
+        }
+        release {
+            buildConfigField "boolean", "IS_DEBUG", "true"
+            buildConfigField "String", "LOG_TAG", "\"mvpArchitecture\""
+            minifyEnabled true
+            signingConfig signingConfigs.release
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
